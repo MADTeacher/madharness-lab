@@ -87,7 +87,12 @@ def run_model_loop(
         # поэтому в следующих ходах держим лишь текстовую заглушку.
         context.mark_request_sent()
         message = raw["choices"][0]["message"]
-        trace.write("model_call_finished", turn=turn, message=message)
+        trace.write(
+            "model_call_finished",
+            turn=turn,
+            message=message,
+            usage=raw.get("usage") or {},
+        )
         context.record_assistant(message)
         calls = message.get("tool_calls") or []
         if not calls:
