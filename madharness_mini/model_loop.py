@@ -102,7 +102,12 @@ def run_model_loop(
         # поэтому в следующих ходах держим лишь текстовую заглушку.
         context.mark_request_sent()
         message = raw["choices"][0]["message"]
-        trace.write("model_call_finished", turn=turn, message=message)
+        trace.write(
+            "model_call_finished",
+            turn=turn,
+            message=message,
+            usage=raw.get("usage") or {},
+        )
         emit_hook(
             hooks,
             "after_model_call",
