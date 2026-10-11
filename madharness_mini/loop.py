@@ -109,7 +109,12 @@ def run_agent(task: str, cfg: Config) -> tuple[str, Any]:
             trace.write("session_end", result=f"error: {exc}")
             raise
         message = raw["choices"][0]["message"]
-        trace.write("model_call_finished", turn=turn, message=message)
+        trace.write(
+            "model_call_finished",
+            turn=turn,
+            message=message,
+            usage=raw.get("usage") or {},
+        )
         messages.append(message)
         calls = message.get("tool_calls") or []
         if not calls:
