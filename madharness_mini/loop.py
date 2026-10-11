@@ -149,7 +149,12 @@ def run_agent(task: str, cfg: Config) -> tuple[str, Any]:
         # прикреплена на прошлом ходу), поэтому base64 можно удешевить до заглушки.
         strip_sent_images(messages)
         message = raw["choices"][0]["message"]
-        trace.write("model_call_finished", turn=turn, message=message)
+        trace.write(
+            "model_call_finished",
+            turn=turn,
+            message=message,
+            usage=raw.get("usage") or {},
+        )
         messages.append(message)
         calls = message.get("tool_calls") or []
         if not calls:
